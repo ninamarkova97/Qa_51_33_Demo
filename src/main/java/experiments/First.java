@@ -8,21 +8,29 @@ public class First {
     WebDriver driver = new ChromeDriver();
 
     @Test
-    public void firstTest(){
+    public void firstTest() {
         driver.get("https://demoqa.com/");
         pause(5000);
         driver.manage().window().maximize();
         pause(5000);
         driver.get("https://demoqa.com/elements");
         pause(5000);
-
+        driver.navigate().back();
         pause(5000);
-       //driver.close();
+        driver.navigate().forward();
+        pause(5000);
+        driver.navigate().refresh();
+        pause(5000);
+        //driver.close();
         driver.quit();
     }
-    public void pause(int time){
-        driver.get("https://demoqa.com/");
-        Thread.sleep();
 
+    public void pause(int time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
