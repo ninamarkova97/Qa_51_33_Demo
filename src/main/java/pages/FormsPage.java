@@ -18,5 +18,6 @@ public class FormsPage extends BasePage{
 
     public void clickBtnPracticeForm(){
         btnPracticeForm.click();
+
     }
 }
