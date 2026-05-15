@@ -2,12 +2,16 @@ package pages;
 
 import dto.Student;
 import enums.Gender;
+import enums.Hobbies;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+
+import java.util.List;
 
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver) {
@@ -23,26 +27,75 @@ public class PracticeFormPage extends BasePage {
     WebElement inputEmail;
     @FindBy(css = "input[placeholder='Mobile Number']")
     WebElement inputMobile;
-    @FindBy (id = "currentAddress")
+    @FindBy(id = "currentAddress")
     WebElement textareaAddress;
     @FindBy(id = "dateOfBirthInput")
     WebElement inputDateOfBirth;
-
+    @FindBy(xpath = "//input[@id='subjectsInput']")
+    WebElement inputSubjects;
+    @FindBy(id = "react-select-3-input")
+    WebElement inputState;
+    @FindBy(id = "react-select-4-input")
+    WebElement inputCity;
+    @FindBy (xpath = "// button[text()='Submit']")
+    WebElement btnSubmit;
 
     public void typePracticeForm(Student student) {
         inputFirstName.sendKeys(student.getFirstName());
         inputLastName.sendKeys(student.getLastName());
         inputEmail.sendKeys(student.getEmail());
         typeGender(student.getGender());
-        inputDateOfBirth.sendKeys(student.getDateOfBirth());
         inputMobile.sendKeys(student.getMobile());
+        inputDateOfBirth.click();
+        inputDateOfBirth.sendKeys(student.getDateOfBirth());
+        typeDateOfBirth(student.getDateOfBirth());
+        typeSubjects(student.getSubjects());
+        typeHobbies(student.getHobbies());
         textareaAddress.sendKeys(student.getAddress());
     }
 
-    private void typeGender(Gender gender){
+    private void typeHobbies(List<Hobbies> hobbies) {
+        for (Hobbies h : hobbies) {
+            switch (h) {
+                case MUSIC:
+                    driver.findElement(By.id(h.getLocator())).click();
+                    break;
+                case SPORTS:
+                    driver.findElement(By.id(h.getLocator())).click();
+                    break;
+                case READING:
+                    driver.findElement(By.id(h.getLocator())).click();
+                    break;
+            }
+        }
+    }
+
+
+    private void typeSubjects(String subjects) {
+        inputSubjects.click();
+        String[] strArr = subjects.trim().split(",");
+        for (String s : strArr) {
+            inputSubjects.sendKeys(s);
+            inputSubjects.sendKeys(Keys.ENTER);
+        }
+    }
+
+
+    private void typeGender(Gender gender) {
         WebElement btnGender = driver.findElement(By.id(gender.getLocator()));
         btnGender.click();
     }
 
+    private void typeDateOfBirth(String dateOfBirth) {
+        inputDateOfBirth.click();
+        String operationSystem = System.getProperty("os.name");
+        System.out.println(operationSystem);
+        if (operationSystem.startsWith("Win"))
+            inputDateOfBirth.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+        if (operationSystem.startsWith("Mac"))
+            inputDateOfBirth.sendKeys(Keys.chord(Keys.COMMAND, "a"));
+        inputDateOfBirth.sendKeys(dateOfBirth);
+        inputDateOfBirth.sendKeys(Keys.ENTER);
+    }
 
 }
