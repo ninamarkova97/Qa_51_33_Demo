@@ -2,7 +2,10 @@ package experiments;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.testng.annotations.Test;
+
+import javax.swing.*;
 
 public class CssSelectors {
 
@@ -63,5 +66,18 @@ public class CssSelectors {
         js.executeScript("document.querySelector('footer').style.display='none'");
     }
 
+    public void  scrollAction(){
+        Actions action = new Actions(driver);
 
-}
+        for(int i = 0; i<10;i++ ){
+            action.scrollByAmount(0,700).perform();
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+

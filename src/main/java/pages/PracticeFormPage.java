@@ -16,7 +16,8 @@ import java.util.List;
 public class PracticeFormPage extends BasePage {
     public PracticeFormPage(WebDriver driver) {
         setDriver(driver);
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
+        PageFactory.initElements(new AjaxElementLocatorFactory
+                (driver, 10), this);
     }
 
     @FindBy(id = "firstName")
@@ -25,7 +26,7 @@ public class PracticeFormPage extends BasePage {
     WebElement inputLastName;
     @FindBy(id = "userEmail")
     WebElement inputEmail;
-    @FindBy(css = "input[placeholder='Mobile Number']")
+    @FindBy(css = "input[placeholder = 'Mobile Number']")
     WebElement inputMobile;
     @FindBy(id = "currentAddress")
     WebElement textareaAddress;
@@ -37,8 +38,10 @@ public class PracticeFormPage extends BasePage {
     WebElement inputState;
     @FindBy(id = "react-select-4-input")
     WebElement inputCity;
-    @FindBy (xpath = "// button[text()='Submit']")
+    @FindBy(id = "submit")
     WebElement btnSubmit;
+    @FindBy(id = "example-modal-sizes-title-lg")
+    WebElement message;
 
     public void typePracticeForm(Student student) {
         inputFirstName.sendKeys(student.getFirstName());
@@ -46,18 +49,36 @@ public class PracticeFormPage extends BasePage {
         inputEmail.sendKeys(student.getEmail());
         typeGender(student.getGender());
         inputMobile.sendKeys(student.getMobile());
-        inputDateOfBirth.click();
-        inputDateOfBirth.sendKeys(student.getDateOfBirth());
         typeDateOfBirth(student.getDateOfBirth());
         typeSubjects(student.getSubjects());
         typeHobbies(student.getHobbies());
         textareaAddress.sendKeys(student.getAddress());
+        typeStateCity(student.getState(), student.getCity());
+        scrollActions();
+        pause(5000);
+        btnSubmit.click();
     }
 
-    private void typeHobbies(List<Hobbies> hobbies) {
-        for (Hobbies h : hobbies) {
-            switch (h) {
-                case MUSIC:
+    public boolean validateMessage(){
+        return isTextInElementValid(message, "Thanks for submitting the form");
+    }
+
+    public boolean validateMessageNegative(){
+        return isTextInElementValid(message, "Wrong");
+    }
+
+    private void typeStateCity(String state, String city){
+        inputState.sendKeys(state);
+        inputState.sendKeys(Keys.ENTER);
+
+        inputCity.sendKeys(city);
+        inputCity.sendKeys(Keys.ENTER);
+    }
+
+    private void typeHobbies(List<Hobbies> hobbies){
+        for (Hobbies h: hobbies){
+            switch (h){
+                case MUSIC :
                     driver.findElement(By.id(h.getLocator())).click();
                     break;
                 case SPORTS:
@@ -70,23 +91,22 @@ public class PracticeFormPage extends BasePage {
         }
     }
 
-
-    private void typeSubjects(String subjects) {
+    private void typeSubjects(String subjects){
         inputSubjects.click();
-        String[] strArr = subjects.trim().split(",");
-        for (String s : strArr) {
+        String[] strArr = subjects.trim().split(","); // [,]{1}\\s+
+        for (String s: strArr){
             inputSubjects.sendKeys(s);
             inputSubjects.sendKeys(Keys.ENTER);
         }
     }
 
-
-    private void typeGender(Gender gender) {
-        WebElement btnGender = driver.findElement(By.id(gender.getLocator()));
+    private void typeGender(Gender gender){
+        WebElement btnGender = driver.findElement
+                (By.id(gender.getLocator()));
         btnGender.click();
     }
 
-    private void typeDateOfBirth(String dateOfBirth) {
+    private void typeDateOfBirth(String dateOfBirth){
         inputDateOfBirth.click();
         String operationSystem = System.getProperty("os.name");
         System.out.println(operationSystem);
@@ -97,5 +117,4 @@ public class PracticeFormPage extends BasePage {
         inputDateOfBirth.sendKeys(dateOfBirth);
         inputDateOfBirth.sendKeys(Keys.ENTER);
     }
-
 }
