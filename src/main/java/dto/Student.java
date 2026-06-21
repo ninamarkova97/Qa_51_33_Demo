@@ -92,7 +92,7 @@ public class Student {
     public void setSubjects(String subjects) {
         this.subjects = subjects;
     }
-
+//
     public List<Hobbies>  getHobbies() {
         return hobbies;
     }
