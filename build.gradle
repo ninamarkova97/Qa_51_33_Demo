@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     implementation 'org.seleniumhq.selenium:selenium-java:4.26.0'
-    implementation 'org.testng:testng:7.10.2'
+    implementation 'org.testng:testng:7.11.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.46'
     annotationProcessor 'org.projectlombok:lombok:1.18.46'
@@ -24,8 +24,9 @@ dependencies {
 test {
     useTestNG()
 }
-tasks.register('smoke_tests', Test) {
-    useTestNG() {
-        suites 'src/test/resources/smoke_tests.xml'
+
+tasks.register('smoke_tests', Test){
+    useTestNG(){
+        suites 'src/test/resources/smoketests.xml'
     }
 }
